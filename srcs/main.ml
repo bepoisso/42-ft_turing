@@ -1,0 +1,2 @@
+let () =
+  Parser.parser

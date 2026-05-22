@@ -3,4 +3,5 @@ type machine = {
   alphabet : string list;
   blank : string;
   states : string list;
+  initial : string;
 }

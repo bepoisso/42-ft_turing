@@ -5,13 +5,13 @@ let () =
 		{
 			name = "unary_sub";
 			alphabet = [ "1"; "."; "-"; "=" ];
-			blank = ".";
+			blank = '.';
 			states = [ "scanright"; "eraseone"; "subone"; "skip"; "HALT" ];
 			initial = "scanright";
-			finals = "HALT";
+			finals = [ "HALT" ];
 		}
 	in
-  let tape = Tape.create_tape "111-11=" in
+	let tape = Tape.create_tape "111-11=" config.blank in
 	let transitions =
 		[
 			{ read = '.'; write = '.'; action = Right; from_state = "scanright"; to_state = "scanright" };

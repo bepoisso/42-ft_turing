@@ -7,7 +7,7 @@ let step machine =
 	let tape =
 		machine.tape
 		|> Tape.write trans.write
-		|> Tape.move trans.action
+		|> Tape.move trans.action machine.config.blank
 	in
 	{ machine with tape; state = trans.to_state }
 
@@ -23,7 +23,7 @@ let run configuration transitions tape =
 		}
 	in
 	let rec loop current =
-		if current.state = current.config.finals then
+		if List.mem current.state current.config.finals then
 			current
 		else
 			(

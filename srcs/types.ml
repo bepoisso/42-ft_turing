@@ -1,12 +1,12 @@
 type action =
-    | Left
-    | Right
+	| Left
+	| Right
 
 type transition = {
-    read : char;
-    write : char;
-    action : action;
-    to_state : string;
+	read : char;
+	write : char;
+	action : action;
+	to_state : string;
 }
 
 type machine = {

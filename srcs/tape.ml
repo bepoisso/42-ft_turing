@@ -10,6 +10,7 @@ let print_tape tape =
 		| [] -> "(nil)"
 		| _ -> String.of_seq (List.to_seq chars)
 	in
+
 	Printf.printf "left[%s]; current[%c]; right[%s]\n"
 		(string_of_char_list (List.rev tape.left))
 		tape.current
@@ -17,6 +18,7 @@ let print_tape tape =
 
 let create_tape str =
 	let len = String.length str in
+
 	if len = 0 then
 		{ left = []; current = '.'; right = [] }
 	else

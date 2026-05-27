@@ -1,27 +1,55 @@
-NAME = exec
+NAME = ft_turing
 
-OCAMLC = ocamlc
-SRC = main.ml
-OBJ_DIR = obj
-OBJ = $(OBJ_DIR)/main.cmo
+SRCS_DIR = srcs
+OBJS_DIR = objs
 
-all: $(NAME)
+SRCS = \
+	$(SRCS_DIR)/types.ml \
+	$(SRCS_DIR)/tape.ml \
+	$(SRCS_DIR)/transition.ml \
+	$(SRCS_DIR)/printer.ml \
+	$(SRCS_DIR)/simulator.ml \
+	$(SRCS_DIR)/main.ml
 
-$(NAME): $(OBJ)
-	$(OCAMLC) -o $(NAME) $(OBJ)
+PACKAGES   = yojson
+OCAMLOPT   = ocamlfind ocamlopt
+FLAGS      = -package $(PACKAGES) -linkpkg -I $(SRCS_DIR) -w +a-70
 
-$(OBJ_DIR)/main.cmo: main.ml | $(OBJ_DIR)
-	$(OCAMLC) -c $< -o $@
+CMXS = $(SRCS:$(SRCS_DIR)/%.ml=$(OBJS_DIR)/%.cmx)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+all: check_opam install_deps compil
+
+check_opam:
+	@command -v opam >/dev/null 2>&1 || \
+		{ echo "Error: opam is not installed."; exit 1; }
+
+install_deps:
+	@eval $$(opam env) && \
+	for pkg in ocamlfind $(PACKAGES); do \
+		opam list --installed $$pkg >/dev/null 2>&1 || \
+		opam install -y $$pkg; \
+	done
+
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
+
+$(OBJS_DIR)/%.cmx: $(SRCS_DIR)/%.ml | $(OBJS_DIR)
+	@eval $$(opam env) && \
+	$(OCAMLOPT) -package $(PACKAGES) -I $(SRCS_DIR) -I $(OBJS_DIR) -c $< -o $@
+
+compil: $(CMXS)
+	@eval $$(opam env) && \
+	$(OCAMLOPT) $(FLAGS) $(CMXS) -o $(NAME)
+
+run: all
+	./$(NAME)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJS_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all check_opam install_deps compil run clean fclean re

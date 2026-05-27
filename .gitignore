@@ -1,6 +1,4 @@
 _opam
 .vscode
-*.out
-*.cmi
-*.cmo
+objs/
 ft_turing

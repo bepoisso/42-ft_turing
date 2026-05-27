@@ -1,10 +1,10 @@
 open Types
 
-let create_tape str =
+let create_tape str blank : tape =
 	let len = String.length str in
 
 	if len = 0 then
-		{ left = []; current = '.'; right = [] }
+		{ left = []; current = blank; right = [] }
 	else
 		let current = String.get str 0 in
 		let right =
@@ -15,12 +15,12 @@ let create_tape str =
 		{ left = []; current; right }
 
 
-let move_right tape =
+let move_right tape blank =
 	match tape.right with
 	| [] ->
 		{
 			left = tape.current :: tape.left;
-			current = '.'; (*TODO replace '.' with machine.configuration.blank*)
+			current = blank;
 			right = [];
 		}
 	| head :: tail ->
@@ -30,12 +30,12 @@ let move_right tape =
 			right = tail;
 		}
 
-let move_left tape =
+let move_left tape blank =
 	match tape.left with
 	| [] ->
 		{
 			left = [];
-			current = '.';
+			current = blank;
 			right = tape.current :: tape.right;
 		}
 	| head :: tail ->
@@ -45,10 +45,10 @@ let move_left tape =
 			right = tape.current :: tape.right;
 		}
 
-let move action tape =
+let move action blank tape =
 	match action with
-	| Types.Left -> move_left tape
-	| Types.Right -> move_right tape
+	| Types.Left -> move_left tape blank
+	| Types.Right -> move_right tape blank
 
 let write c tape =
 	{

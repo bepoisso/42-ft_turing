@@ -1,20 +1,4 @@
-type tape = {
-	left : char list;
-	current : char;
-	right : char list;
-}
-
-let print_tape tape =
-	let string_of_char_list chars =
-		match chars with
-		| [] -> "(nil)"
-		| _ -> String.of_seq (List.to_seq chars)
-	in
-
-	Printf.printf "left[%s]; current[%c]; right[%s]\n"
-		(string_of_char_list (List.rev tape.left))
-		tape.current
-		(string_of_char_list tape.right)
+open Types
 
 let create_tape str =
 	let len = String.length str in
@@ -36,7 +20,7 @@ let move_right tape =
 	| [] ->
 		{
 			left = tape.current :: tape.left;
-			current = '.';
+			current = '.'; (*TODO replace '.' with machine.configuration.blank*)
 			right = [];
 		}
 	| head :: tail ->
@@ -60,6 +44,11 @@ let move_left tape =
 			current = head;
 			right = tape.current :: tape.right;
 		}
+
+let move action tape =
+	match action with
+	| Types.Left -> move_left tape
+	| Types.Right -> move_right tape
 
 let write c tape =
 	{

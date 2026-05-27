@@ -1,4 +1,5 @@
 _opam
 .vscode
+.merlin
 objs/
 ft_turing

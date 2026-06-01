@@ -24,7 +24,10 @@ let run configuration transitions tape =
 	in
 	let rec loop current =
 		if List.mem current.state current.config.finals then
-			current
+			(
+				Printf.printf "output: %s\n" (Printer.tape_to_string current.tape);
+				current
+			)
 		else
 			(
 				Printer.print_outputs_machine current;

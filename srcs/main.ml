@@ -19,7 +19,7 @@ let () =
 			{ read = '-'; write = '-'; action = Right; from_state = "scanright"; to_state = "scanright" };
 			{ read = '='; write = '.'; action = Left; from_state = "scanright"; to_state = "eraseone" };
 			{ read = '1'; write = '='; action = Left; from_state = "eraseone"; to_state = "subone" };
-			{ read = '-'; write = '.'; action = Left; from_state = "eraseone"; to_state = "HALT" };
+			(* { read = '-'; write = '.'; action = Left; from_state = "eraseone"; to_state = "HALT" }; *)
 			{ read = '1'; write = '1'; action = Left; from_state = "subone"; to_state = "subone" };
 			{ read = '-'; write = '-'; action = Left; from_state = "subone"; to_state = "skip" };
 			{ read = '.'; write = '.'; action = Left; from_state = "skip"; to_state = "skip" };

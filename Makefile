@@ -5,7 +5,9 @@ OBJS_DIR = objs
 
 SRCS = \
 	$(SRCS_DIR)/types.ml \
-	$(SRCS_DIR)/parser.ml \
+	$(SRCS_DIR)/parserFile.ml \
+	$(SRCS_DIR)/parserInput.ml \
+	$(SRCS_DIR)/printInfo.ml \
 	$(SRCS_DIR)/main.ml
 
 PACKAGES   = yojson

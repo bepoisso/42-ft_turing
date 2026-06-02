@@ -18,7 +18,7 @@ type tape = {
 type configuration = {
   name : string;
   alphabet : string list;
-  blank : string;
+  blank : char;
   states : string list;
   initial : string;
   finals : string list;

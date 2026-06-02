@@ -47,7 +47,7 @@ let check_blank json =
     print_endline "Blank element must be a part of alphabet";
     exit 1
   );
-  blank
+  blank.[0]
 
 let check_initial json =
   let initial = (json |> Yojson.Basic.Util.member "initial" |> Yojson.Basic.Util.to_string) in
@@ -92,7 +92,7 @@ let parse_transition root_json trans_json : Types.transition =
     print_endline "write element must be part of alphabet field";
     exit 1
   );
-  let write_char = read.[0] in
+  let write_char = write.[0] in
   let action = parse_action (trans_json |> Yojson.Basic.Util.member "action" |> Yojson.Basic.Util.to_string) in
   {
     read     = read_char;
@@ -101,16 +101,43 @@ let parse_transition root_json trans_json : Types.transition =
     action   = action;
   }
 
+let check_transitions transitions =
+  let states = List.map fst transitions in
+
+  if List.length states <> List.length (List.sort_uniq String.compare states) then (
+    print_endline "Duplicate state in transitions";
+    exit 1
+  );
+
+  List.iter
+    (fun (state, trans_list) ->
+      let reads = List.map (fun (t : Types.transition) -> t.read) trans_list in
+
+      if List.length reads <> List.length (List.sort_uniq Char.compare reads) then (
+        Printf.printf
+          "Duplicate read symbol found in state '%s'\n"
+          state;
+        exit 1
+      ))
+      transitions
 let check_transitions_tab json =
   let states = json |> Yojson.Basic.Util.member "states" |> Yojson.Basic.Util.to_list |> List.map Yojson.Basic.Util.to_string in
   let assoc  = json |> Yojson.Basic.Util.member "transitions" |> Yojson.Basic.Util.to_assoc in
-  List.map (fun (state, trans_list) ->
-    if not (List.mem state states) then (
-      Printf.printf "State '%s' in transitions is not part of states field\n" state;
-      exit 1
-    );
-    (state, trans_list |> Yojson.Basic.Util.to_list |> List.map (parse_transition json))
-  ) assoc
+  let transitions =
+    List.map (fun (state, trans_list) ->
+      if not (List.mem state states) then (
+        Printf.printf "State '%s' in transitions is not part of states field\n" state;
+        exit 1
+      );
+      (state,
+        trans_list
+        |> Yojson.Basic.Util.to_list
+        |> List.map (parse_transition json))
+    ) assoc
+in 
+
+check_transitions transitions;
+transitions
 
 let get_info json : Types.configuration =
   try {
@@ -145,15 +172,9 @@ let print_transitions transitions =
     List.iter print_transition trans_list
   ) transitions
 
-let parser =
+let parserFile =
   check_args;
   let filename = Sys.argv.(1) in
     let json = check_file filename in
       let configuration = get_info json in
-        print_endline configuration.name;
-        List.iter print_endline configuration.alphabet;
-        print_endline configuration.blank;
-        List.iter print_endline configuration.states;
-        print_endline configuration.initial;
-        List.iter print_endline configuration.finals;
-        print_transitions configuration.transitions
+      configuration

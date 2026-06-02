@@ -1,2 +1,4 @@
 let () =
-  Parser.parser
+  let configuration = ParserFile.parserFile in
+  ParserInput.parserInput configuration;
+  PrintInfo.printHeader configuration

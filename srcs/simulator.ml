@@ -3,7 +3,7 @@ open Types
 
 let step machine =
 	let current_symbol = machine.tape.current in
-	let trans = Transition.find_transition machine.state current_symbol machine.transitions in
+	let trans = Transition.find_transition machine.state current_symbol machine.config.transitions in
 	let tape =
 		machine.tape
 		|> Tape.write trans.write
@@ -13,13 +13,13 @@ let step machine =
 
 
 
-let run configuration transitions tape =
+let run configuration tape_s =
+	let tape = Tape.create_tape tape_s configuration.blank in
 	let machine =
 		{
 			config = configuration;
-			tape;
+			tape = tape;
 			state = configuration.initial;
-			transitions;
 		}
 	in
 	let rec loop current =

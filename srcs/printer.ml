@@ -13,7 +13,7 @@ let tape_to_string tape =
 		(string_of_char_list tape.right)
 
 let print_outputs_machine (machine : machine) =
-	let transition = Transition.find_transition machine.state machine.tape.current machine.transitions in
+	let transition = Transition.find_transition machine.state machine.tape.current machine.config.transitions in
 	let direction = match transition.action with
 		| Left -> "LEFT"
 		| Right -> "RIGHT"

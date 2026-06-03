@@ -2,14 +2,14 @@
 	"name" : "palindrome",
 	"alphabet": [ "a", "b", ".", "+", "-", "n", "y" ],
 	"blank" : ".",
-	"states" : [ "scanright", "find_right_a", "find_right_b", "check_a", "check_b", "return_left", "reject", "accept", "HALT" ],
+	"states" : [ "scanright", "find_right_a", "find_right_b", "check_a", "check_b", "middle_a", "middle_b", "return_left", "reject", "accept", "HALT" ],
 	"initial" : "scanright",
 	"finals" : [ "HALT" ],
 
 	"transitions" : {
 
 		"scanright": [
-			{ "read" : ".", "to_state": "scanright", "write": ".", "action": "RIGHT" },
+			{ "read" : ".", "to_state": "accept", "write": ".", "action": "RIGHT" },
 			{ "read" : "+", "to_state": "scanright", "write": "+", "action": "RIGHT" },
 			{ "read" : "-", "to_state": "accept", "write": "-", "action": "RIGHT" },
 			{ "read" : "a", "to_state": "find_right_a", "write": "+", "action": "RIGHT" },
@@ -36,14 +36,28 @@
 			{ "read" : "a", "to_state": "return_left", "write": "-", "action": "LEFT" },
 			{ "read" : "-", "to_state": "check_a", "write": "-", "action": "LEFT" },
 			{ "read" : "b", "to_state": "reject", "write": "b", "action": "RIGHT" },
-			{ "read" : "+", "to_state": "reject", "write": "+", "action": "RIGHT" }
+			{ "read" : "+", "to_state": "middle_a", "write": "+", "action": "LEFT" }
 		],
 
 		"check_b": [
 			{ "read" : "b", "to_state": "return_left", "write": "-", "action": "LEFT" },
 			{ "read" : "-", "to_state": "check_b", "write": "-", "action": "LEFT" },
 			{ "read" : "a", "to_state": "reject", "write": "a", "action": "RIGHT" },
-			{ "read" : "+", "to_state": "reject", "write": "+", "action": "RIGHT" }
+			{ "read" : "+", "to_state": "middle_b", "write": "+", "action": "LEFT" }
+		],
+
+		"middle_a": [
+			{ "read" : "+", "to_state": "middle_a", "write": "+", "action": "LEFT" },
+			{ "read" : ".", "to_state": "scanright", "write": ".", "action": "RIGHT" },
+			{ "read" : "a", "to_state": "reject", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "reject", "write": "b", "action": "RIGHT" }
+		],
+
+		"middle_b": [
+			{ "read" : "+", "to_state": "middle_b", "write": "+", "action": "LEFT" },
+			{ "read" : ".", "to_state": "scanright", "write": ".", "action": "RIGHT" },
+			{ "read" : "a", "to_state": "reject", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "reject", "write": "b", "action": "RIGHT" }
 		],
 
 		"return_left": [

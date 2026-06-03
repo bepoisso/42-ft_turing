@@ -1,0 +1,73 @@
+{
+	"name" : "palindrome",
+	"alphabet": [ "a", "b", ".", "+", "-", "n", "y" ],
+	"blank" : ".",
+	"states" : [ "scanright", "find_right_a", "find_right_b", "check_a", "check_b", "return_left", "reject", "accept", "HALT" ],
+	"initial" : "scanright",
+	"finals" : [ "HALT" ],
+
+	"transitions" : {
+
+		"scanright": [
+			{ "read" : ".", "to_state": "scanright", "write": ".", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "scanright", "write": "+", "action": "RIGHT" },
+			{ "read" : "-", "to_state": "accept", "write": "-", "action": "RIGHT" },
+			{ "read" : "a", "to_state": "find_right_a", "write": "+", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "find_right_b", "write": "+", "action": "RIGHT" }
+		],
+
+		"find_right_a": [
+			{ "read" : ".", "to_state": "check_a", "write": ".", "action": "LEFT" },
+			{ "read" : "-", "to_state": "check_a", "write": "-", "action": "LEFT" },
+			{ "read" : "a", "to_state": "find_right_a", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "find_right_a", "write": "b", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "find_right_a", "write": "+", "action": "RIGHT" }
+		],
+
+		"find_right_b": [
+			{ "read" : ".", "to_state": "check_b", "write": ".", "action": "LEFT" },
+			{ "read" : "-", "to_state": "check_b", "write": "-", "action": "LEFT" },
+			{ "read" : "a", "to_state": "find_right_b", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "find_right_b", "write": "b", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "find_right_b", "write": "+", "action": "RIGHT" }
+		],
+
+		"check_a": [
+			{ "read" : "a", "to_state": "return_left", "write": "-", "action": "LEFT" },
+			{ "read" : "-", "to_state": "check_a", "write": "-", "action": "LEFT" },
+			{ "read" : "b", "to_state": "reject", "write": "b", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "reject", "write": "+", "action": "RIGHT" }
+		],
+
+		"check_b": [
+			{ "read" : "b", "to_state": "return_left", "write": "-", "action": "LEFT" },
+			{ "read" : "-", "to_state": "check_b", "write": "-", "action": "LEFT" },
+			{ "read" : "a", "to_state": "reject", "write": "a", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "reject", "write": "+", "action": "RIGHT" }
+		],
+
+		"return_left": [
+			{ "read" : ".", "to_state": "scanright", "write": ".", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "scanright", "write": "+", "action": "RIGHT" },
+			{ "read" : "-", "to_state": "return_left", "write": "-", "action": "LEFT" },
+			{ "read" : "a", "to_state": "return_left", "write": "a", "action": "LEFT" },
+			{ "read" : "b", "to_state": "return_left", "write": "b", "action": "LEFT" }
+		],
+
+		"reject": [
+			{ "read" : ".", "to_state": "HALT", "write": "n", "action": "RIGHT" },
+			{ "read" : "a", "to_state": "reject", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "reject", "write": "b", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "reject", "write": "+", "action": "RIGHT" },
+			{ "read" : "-", "to_state": "reject", "write": "-", "action": "RIGHT" }
+		],
+
+		"accept": [
+			{ "read" : ".", "to_state": "HALT", "write": "y", "action": "RIGHT" },
+			{ "read" : "a", "to_state": "accept", "write": "a", "action": "RIGHT" },
+			{ "read" : "b", "to_state": "accept", "write": "b", "action": "RIGHT" },
+			{ "read" : "+", "to_state": "accept", "write": "+", "action": "RIGHT" },
+			{ "read" : "-", "to_state": "accept", "write": "-", "action": "RIGHT" }
+		]
+	}
+}

@@ -1,34 +1,33 @@
 type action =
-    | Left
-    | Right
+	| Left
+	| Right
 
 type transition = {
-    read : char;
-    write : char;
-    action : action;
-    to_state : string;
+	read : char;
+	write : char;
+	action : action;
+	to_state : string;
 }
 
 type tape = {
-    left : char list;
-    current : char;
-    right : char list;
+	left : char list;
+	current : char;
+	right : char list;
 }
 
 type configuration = {
-  name : string;
-  alphabet : string list;
-  blank : char;
-  states : string list;
-  initial : string;
-  finals : string list;
-  transitions : (string * transition list) list;
+	name : string;
+	alphabet : string list;
+	blank : char;
+	states : string list;
+	initial : string;
+	finals : string list;
+	transitions : (string * transition list) list;
 }
 
 
 type machine = {
-    config            : configuration;
-    tape                 : tape;
-    state                : string;
-    transitions    : transition list;
+	config : configuration;
+	tape : tape;
+	state : string;
 }

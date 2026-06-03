@@ -8,6 +8,10 @@ SRCS = \
 	$(SRCS_DIR)/parserFile.ml \
 	$(SRCS_DIR)/parserInput.ml \
 	$(SRCS_DIR)/printInfo.ml \
+	$(SRCS_DIR)/tape.ml \
+	$(SRCS_DIR)/transition.ml \
+	$(SRCS_DIR)/printer.ml \
+	$(SRCS_DIR)/simulator.ml \
 	$(SRCS_DIR)/main.ml
 
 PACKAGES   = yojson
@@ -42,11 +46,23 @@ compil: $(CMXS)
 
 run: all
 	./$(NAME)
+$(OBJS_DIR)/%.cmx: $(SRCS_DIR)/%.ml | $(OBJS_DIR)
+	@eval $$(opam env) && \
+	$(OCAMLOPT) -package $(PACKAGES) -I $(SRCS_DIR) -I $(OBJS_DIR) -c $< -o $@
+
+compil: $(CMXS)
+	@eval $$(opam env) && \
+	$(OCAMLOPT) $(FLAGS) $(CMXS) -o $(NAME)
+
+run: all
+	./$(NAME)
 
 clean:
 	@rm -rf $(OBJS_DIR)
+	@rm -rf $(OBJS_DIR)
 
 fclean: clean
+	@rm -f $(NAME)
 	@rm -f $(NAME)
 
 re: fclean all

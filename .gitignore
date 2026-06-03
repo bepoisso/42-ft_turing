@@ -1,5 +1,5 @@
 _opam
 .vscode
-*.out
-*.cmi
-*.cmo
+.merlin
+objs/
+ft_turing

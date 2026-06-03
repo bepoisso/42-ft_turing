@@ -6,7 +6,6 @@ type transition = {
 	read : char;
 	write : char;
 	action : action;
-	from_state : string;
 	to_state : string;
 }
 
@@ -30,5 +29,5 @@ type machine = {
 	config			: configuration;
 	tape 				: tape;
 	state				: string;
-	transitions	: transition list;
+	transitions : (string * transition list) list;
 }

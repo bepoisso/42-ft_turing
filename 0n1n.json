@@ -1,0 +1,49 @@
+{
+    "name": "0n1n",
+    "alphabet": [ "0", "1", "x", ".", "y", "n" ],
+    "blank": ".",
+    "states": [ "check_order", "check_ones", "find1", "find0", "check", "write_y", "write_n", "HALT" ],
+    "initial": "check_order",
+    "finals": [ "HALT" ],
+    "transitions": {
+        "check_order": [
+            { "read": "0", "to_state": "check_order", "write": "0", "action": "RIGHT" },
+            { "read": "1", "to_state": "check_ones",  "write": "1", "action": "RIGHT" },
+            { "read": ".", "to_state": "find1",        "write": ".", "action": "LEFT"  }
+        ],
+        "check_ones": [
+            { "read": "1", "to_state": "check_ones",  "write": "1", "action": "RIGHT" },
+            { "read": ".", "to_state": "find1",        "write": ".", "action": "LEFT"  },
+            { "read": "0", "to_state": "write_n",     "write": "0", "action": "RIGHT" }
+        ],
+        "find1": [
+            { "read": "0", "to_state": "find1",  "write": "0", "action": "RIGHT" },
+            { "read": "x", "to_state": "find1",  "write": "x", "action": "RIGHT" },
+            { "read": "1", "to_state": "find0",  "write": "x", "action": "LEFT"  },
+            { "read": ".", "to_state": "check",  "write": ".", "action": "LEFT"  },
+            { "read": "y", "to_state": "HALT",   "write": "y", "action": "RIGHT" },
+            { "read": "n", "to_state": "HALT",   "write": "n", "action": "RIGHT" }
+        ],
+        "find0": [
+            { "read": "1", "to_state": "find0",  "write": "1", "action": "LEFT"  },
+            { "read": "x", "to_state": "find0",  "write": "x", "action": "LEFT"  },
+            { "read": "0", "to_state": "find1",  "write": "x", "action": "RIGHT" },
+            { "read": ".", "to_state": "write_n", "write": ".", "action": "RIGHT" }
+        ],
+        "check": [
+            { "read": "x", "to_state": "check",   "write": "x", "action": "LEFT"  },
+            { "read": "0", "to_state": "write_n", "write": "0", "action": "RIGHT" },
+            { "read": ".", "to_state": "write_y", "write": ".", "action": "RIGHT" }
+        ],
+        "write_y": [
+            { "read": "x", "to_state": "write_y", "write": "x", "action": "RIGHT" },
+            { "read": ".", "to_state": "HALT",     "write": "y", "action": "RIGHT" }
+        ],
+        "write_n": [
+            { "read": "0", "to_state": "write_n", "write": "0", "action": "RIGHT" },
+            { "read": "1", "to_state": "write_n", "write": "1", "action": "RIGHT" },
+            { "read": "x", "to_state": "write_n", "write": "x", "action": "RIGHT" },
+            { "read": ".", "to_state": "HALT",     "write": "n", "action": "RIGHT" }
+        ]
+    }
+}

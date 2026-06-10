@@ -54,7 +54,7 @@ let tape_to_string tape =
 		| _ -> String.of_seq (List.to_seq chars)
 	in
 
-	Printf.sprintf "%s<%c>%s"
+	Printf.sprintf "%s\027[31m%c\027[0m%s"
 		(string_of_char_list (List.rev tape.left))
 		tape.current
 		(string_of_char_list tape.right)
@@ -65,7 +65,7 @@ let print_outputs_machine (machine : machine) =
 		| Left -> "LEFT"
 		| Right -> "RIGHT"
 	in
-	Printf.printf "[%s] (%s, %c) -> (%s, %c, %s)\n"
+	Printf.printf "(%s) (%s, %c) -> (%s, %c, %s)\n"
 		(tape_to_string machine.tape)
 		machine.state
 		transition.read

@@ -26,7 +26,9 @@ check_opam:
 		{ echo "Error: opam is not installed."; exit 1; }
 
 install_deps:
-	@eval $$(opam env) && \
+	@opam install ocamlfind -y >/dev/null 2>&1 && \
+	opam install yojson -y >/dev/null 2>&1 && \
+	eval $$(opam env) && \
 	for pkg in ocamlfind $(PACKAGES); do \
 		opam list --installed $$pkg >/dev/null 2>&1 || \
 		opam install -y $$pkg; \
@@ -43,9 +45,6 @@ compil: $(CMXS)
 	@eval $$(opam env) && \
 	$(OCAMLOPT) $(FLAGS) $(CMXS) -o $(NAME)
 
-run: all
-	./$(NAME)
-
 clean:
 	@rm -rf $(OBJS_DIR)
 
@@ -54,4 +53,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all check_opam install_deps compil run clean fclean re
+.PHONY: all check_opam install_deps compil clean fclean re

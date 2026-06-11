@@ -2,10 +2,15 @@
     "name": "palindrome",
     "alphabet": [ "a", "b", ".", "x", "y", "n" ],
     "blank": ".",
-    "states": [ "read_first", "find_last_a", "find_last_b", "erase_last_a", "erase_last_b", "rewind", "write_y", "write_n", "HALT" ],
-    "initial": "read_first",
+    "states": [ "check_input", "read_first", "find_last_a", "find_last_b", "erase_last_a", "erase_last_b", "rewind", "write_y", "write_n", "HALT" ],
+    "initial": "check_input",
     "finals": [ "HALT" ],
     "transitions": {
+		"check_input": [
+            { "read": "a", "to_state": "check_input", "write": "a", "action": "RIGHT"},
+            { "read": "b", "to_state": "check_input", "write": "b", "action": "RIGHT"},
+			{ "read": ".", "to_state": "rewind", "write": ".", "action": "LEFT"}
+		],
         "read_first": [
             { "read": "a", "to_state": "find_last_a", "write": "x", "action": "RIGHT"},
             { "read": "b", "to_state": "find_last_b", "write": "x", "action": "RIGHT"},
@@ -27,12 +32,14 @@
 		"erase_last_a": [
             { "read": "a", "to_state": "rewind", "write": "x", "action": "LEFT"},
             { "read": "b", "to_state": "write_n", "write": "b", "action": "RIGHT"},
-			{ "read": "x", "to_state": "write_y", "write": "x", "action": "RIGHT"}
+			{ "read": "x", "to_state": "erase_last_a", "write": "x", "action": "LEFT"},
+			{ "read": ".", "to_state": "write_y", "write": ".", "action": "RIGHT"}
         ],
 		"erase_last_b": [
             { "read": "b", "to_state": "rewind", "write": "x", "action": "LEFT"},
             { "read": "a", "to_state": "write_n", "write": "a", "action": "RIGHT"},
-			{ "read": "x", "to_state": "write_y", "write": "x", "action": "RIGHT"}
+			{ "read": "x", "to_state": "erase_last_b", "write": "x", "action": "LEFT"},
+			{ "read": ".", "to_state": "write_y", "write": ".", "action": "RIGHT"}
         ],
 		"rewind": [
             { "read": "a", "to_state": "rewind",  "write": "a", "action": "LEFT" },
